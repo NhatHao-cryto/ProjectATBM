@@ -16,36 +16,53 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name ="Paiting-detail", value = "/painting-detail")
+@WebServlet(name ="Painting-detail", value = "/painting-detail")
 public class GetDetail extends HttpServlet {
     private PaintingService paintingService = new PaintingService();
     private PrivewService privewService = new PrivewService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pid = req.getParameter("pid");
-        System.out.println("pid:"+ pid);
-        int id = Integer.parseInt(pid);
-        req.getSession().setAttribute("pid", id);
         try {
-            List<ProductReview> reviews = privewService.getReviewByPaintingId(id);
-            req.setAttribute("reviews", reviews);
-            Painting painting = paintingService.getPaintingDetail(id);
-            req.setAttribute("painting", painting);
-            req.setAttribute("p", painting);
-            System.out.println(painting);
-            if(painting == null){
-              //  req.setAttribute("message", "không tìm thấy sản phẩm");
-               // req.getRequestDispatcher("user/painting-detail.jsp").forward(req, resp);
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/404.jsp");
-                dispatcher.forward(req, resp);
+            String pid = req.getParameter("pid");
+            if (pid == null || pid.isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Thiếu tham số ID tranh");
+                return;
             }
 
-        } catch (SQLException e) {
-            req.setAttribute("message", "không tìm thấy sản phẩm");
-            req.getRequestDispatcher("user/painting-detail.jsp").forward(req, resp);
-            throw new RuntimeException(e);
-        }
-        req.getRequestDispatcher("user/painting-detail.jsp").forward(req, resp);
-    }
+            int id = Integer.parseInt(pid);
+            System.out.println("PID nhận được: " + id); // Debug log
 
+            // Lấy thông tin tranh
+            Painting painting = paintingService.getPaintingDetail(id);
+            if (painting == null) {
+                System.out.println("Không tìm thấy tranh với ID: " + id);
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy tranh");
+                return;
+            }
+
+            // Lấy đánh giá
+            List<ProductReview> reviews = privewService.getReviewByPaintingId(id);
+
+            // Đặt attributes
+            req.setAttribute("painting", painting);
+            req.setAttribute("reviews", reviews);
+            req.setAttribute("p", painting); // Tương tự như trên, có thể bỏ nếu không cần
+
+            // Chuyển hướng
+            System.out.println("Chuyển hướng tới trang chi tiết..."); // Debug log
+            req.getRequestDispatcher("/user/painting-detail.jsp").forward(req, resp);
+
+        } catch (NumberFormatException e) {
+            System.err.println("ID tranh không hợp lệ: " + e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID tranh không hợp lệ");
+        } catch (SQLException e) {
+            System.err.println("Lỗi database: " + e.getMessage());
+            req.setAttribute("error", "Lỗi hệ thống khi tải thông tin tranh");
+            req.getRequestDispatcher("/user/painting-detail.jsp").forward(req, resp);
+        } catch (Exception e) {
+            System.err.println("Lỗi không xác định: " + e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi server");
+        }
+    }
 }

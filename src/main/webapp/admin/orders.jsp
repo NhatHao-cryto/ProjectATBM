@@ -105,7 +105,7 @@
             <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#deleteOrderModal" data-order-id="${order.id}">Xóa</button>
           </td>
-        </tr>`;
+        </tr>
         </tr>
       </c:forEach>
       </tbody>
@@ -148,7 +148,7 @@
         <table class="table table-striped">
           <thead>
           <tr>
-            <th>Max sản phẩm</th>
+            <th>Mã sản phẩm</th>
             <th>Tên Sản Phẩm</th>
             <th>Ảnh</th>
             <th>Kích Thước</th>

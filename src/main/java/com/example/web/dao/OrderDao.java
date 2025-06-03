@@ -97,7 +97,7 @@ public class OrderDao {
 
     public List<Order> getListAllOrdersHistoryAdmin() throws SQLException {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM orders  where status IN ('hoàn thành', 'thất bại','đã hủy') ORDER BY orderDate DESC";
+        String query = "SELECT * FROM orders  where status IN ('hoàn thành','đã hủy') ORDER BY orderDate DESC";
         PreparedStatement ps = conn.prepareStatement(query);
 
         try (ResultSet rs = ps.executeQuery()) {
@@ -140,7 +140,16 @@ public class OrderDao {
         //for(Order o : orderDao.getCurrentOrdersForUser(2)){
        //     System.out.println(o);
        // }
-        System.out.println(orderDao.getOrder(36));
+        List<Order> currentOrders = orderDao.getListAllOrdersCrurrentAdmin();
+        for (Order order : currentOrders) {
+            System.out.println(order);
+        }
+
+        System.out.println("\n=== Lịch sử đơn hàng (hoàn thành / đã hủy) ===");
+        List<Order> historyOrders = orderDao.getListAllOrdersHistoryAdmin();
+        for (Order order : historyOrders) {
+            System.out.println(order);
+        }
     }
 
     public boolean deleteOrder(int i) throws SQLException {

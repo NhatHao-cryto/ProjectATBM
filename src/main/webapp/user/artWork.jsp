@@ -21,7 +21,6 @@
 
 <body>
 <%@ include file="/partials/header.jsp" %>
-
 <div class="page-title-inner">
     <h5> Tác phẩm </h5>
 </div>

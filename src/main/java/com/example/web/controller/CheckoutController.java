@@ -24,12 +24,6 @@ public class CheckoutController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            List<Voucher> vouchers = voucherService.getAll();
-            req.setAttribute("v", vouchers);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         req.getRequestDispatcher("user/checkout.jsp").forward(req, resp);
 
@@ -70,7 +64,7 @@ public class CheckoutController extends HttpServlet {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("Có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại!");
-                e.printStackTrace(); // Thêm dòng này
+                e.printStackTrace();
             }
         } catch (Exception e) {
             response.setContentType("application/json");

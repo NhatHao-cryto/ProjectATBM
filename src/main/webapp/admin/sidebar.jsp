@@ -17,7 +17,6 @@
   <a href="${pageContext.request.contextPath}/admin/artists">Quản lý họa sĩ</a>
   <a href="${pageContext.request.contextPath}/admin/reviews">Quản lý đánh giá</a>
   <a href="${pageContext.request.contextPath}/admin/discount">Quản lý giảm giá</a>
-  <a href="${pageContext.request.contextPath}/admin/vouchers">Quản lý voucher</a>
 
 
 </div>

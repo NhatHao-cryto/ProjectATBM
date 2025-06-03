@@ -259,22 +259,6 @@
           </div>
         </c:otherwise>
       </c:choose>
-
-      <div class="voucher-container">
-        <label for="voucherSelect" class="voucher-label">Chọn mã giảm giá:</label>
-        <select id="voucherSelect" name="voucherCode" class="voucher-select">
-          <option value="">--Chọn mã giảm giá--</option>
-          <c:forEach items="${v}" var="voucher">
-            <option value="${voucher.id}">${voucher.name} - Giảm ${voucher.discount}%</option>
-          </c:forEach>
-        </select>
-
-        <div class="price-display">
-          Giá phải trả: <span id="finalPrice">
-        <f:formatNumber value="${sessionScope.cart.totalPrice}" type="currency" currencySymbol="VND"/>
-      </span>
-        </div>
-      </div>
     </div>
 
 

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name ="Artwork", value = "/artwork")
+@WebServlet("/artwork")
 public class GetList extends HttpServlet {
     PaintingService ps = new PaintingService();
     ArtistService as = new ArtistService();
@@ -28,6 +28,7 @@ public class GetList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("✅ Servlet GetList is loaded!");
         int currentPage = 1;
         int recordsPerPage = 12;
 
@@ -94,14 +95,12 @@ public class GetList extends HttpServlet {
             req.setAttribute("recordsPerPage", recordsPerPage);
             req.setAttribute("totalPages", totalPages);
 
-        } catch (SQLException e) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/404.jsp");
-            dispatcher.forward(req, resp);
-            throw new RuntimeException(e);
+            req.getRequestDispatcher("/user/artWork.jsp").forward(req, resp);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra lỗi cụ thể
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi server: " + e.getMessage());
         }
-
-        req.getRequestDispatcher("user/artWork.jsp").forward(req  ,resp);
-
     }
 
 
